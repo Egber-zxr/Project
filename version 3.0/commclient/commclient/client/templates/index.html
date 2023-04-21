@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Files Download</title>
+    <script src="/static/js/common/common.js"></script>
+    <style>
+        body {
+          background-color: #c8e6c9; /* Light green background for the client-side version */
+          color: #333333;
+        }
+    </style>
+</head>
+<body  >
+{% raw %}
+<div id="app"  v-cloak>
+    <el-row :gutter="10" style="margin-top:20px">
+        <el-form :model="queryPanel" ref="queryPanel" label-width="200px">
+            <el-col :span="6">
+                <el-form-item label="Please enter the name of the file you want to download(cifar,min):" prop="fileName">
+                    <el-input v-model="queryPanel.fileName" clearable></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="10">
+                <el-button icon="el-icon-search" @click="handleQuery" type="primary" plain > Query</el-button>
+            </el-col>
+			<el-col :span="8" v-if="!haveDownloadClient">
+
+            </el-col>
+        </el-form>
+    </el-row>
+
+
+    <el-row style="height: 80%;">
+		<el-col :span="24"  v-if="showDownLoad & !haveDownloadClient">
+			 <el-button icon="el-icon-download" @click="handleDownloadLocal('CIFAR10')" type="success" plain > Download （CIFAR10） </el-button>
+            <el-button icon="el-icon-download" @click="handleDownloadLocal('CIFAR10')" type="success" plain > Download （MNIST） </el-button>
+		</el-col>
+        <el-col :span="24"  v-if="showDownLoad & haveDownloadClient">
+            <el-table :data="tableData"  border style="width: 100%" tooltip-effect="light">
+
+                <el-table-column prop="clientName" label="Client Name" width="180">
+                </el-table-column>
+
+                <el-table-column prop="fileName" label="File Name" width="180">
+                </el-table-column>
+
+<!--                <el-table-column prop="orgUrl" label="原始下载地址" >-->
+<!--                </el-table-column>-->
+                <el-table-column prop="datasetFileNames" label="Dataset" >
+                </el-table-column>
+
+                <el-table-column prop="clientUrl" label="Client download address" >
+                </el-table-column>
+
+                 <el-table-column prop="online" label="Online/Offline" width="180">
+                     <template slot-scope="scope">
+                            <el-tag
+                              :type="scope.row.online == '0' ? 'danger' : 'success'"
+                              disable-transitions>{{scope.row.online == '0' ? 'Offline' : 'Online'}}</el-tag>
+                          </template>
+                </el-table-column>
+
+                 <el-table-column fixed="right" label="operation" width="200">
+                    <template slot-scope="scope">
+                        <el-button v-if="scope.row.online == '1'" size="mini" @click="handleDownload(scope.$index, scope.row)">Download</el-button>
+                    </template>
+                </el-table-column>
+
+            </el-table>
+			<el-col :span="24" style="text-align: right">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    :page-sizes="[10, 20, 30, 100]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="rowTotal">
+            </el-pagination>
+        </el-col>
+        </el-col>
+
+    </el-row>
+</div>
+{% endraw %}
+</body>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                visible: false,
+                queryPanel: {clientName:'',fileName:'',online:'1'},
+                tableData: [],
+                currentClients: [],
+                form: {},
+                saveBtnTitle: 'Creat Now',
+                currentPage: 1,
+                pageSize: 10,
+                rowTotal: 0,
+                radio:3,
+                showDownLoad:false,
+                haveDownloadClient:false
+            }
+        },
+        methods: {
+            pull_update: function(){
+                const self = this;
+                this.interval = setInterval(function(){
+                    if (self.tableData) {
+                        ApiManager.get('info/checkOnline', {}, function(res) {
+                            // check if get any new client
+                            if (res.code == "0") {
+                                let difference = res.data.filter(x => !self.currentClients.includes(x));
+                                console.log(difference)
+                                if (difference.length > 0) {
+                                    self.currentClients = self.currentClients.concat(res.data)
+                                    self.$notify({
+                                      title: 'Client launch notification',
+                                      message: difference + 'Online',
+                                      type: 'success'
+                                    });
+                                    self.handleQuery()
+                                }
+                            }
+                        });
+                    }
+                }, 2000);
+            },
+            async update_datasets(clientId, fileName) {
+                ApiManager.post('dataset/add', {"clientId": clientId, "fileName": fileName}, function(res) {
+                    console.log(res)
+                })
+            },
+            async saveFile(blob, clientId, fileName) {
+                try {
+                    const handle = await window.showSaveFilePicker({
+                      types: [{
+                        accept: {
+                          // Omitted
+                        },
+                      }],
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(blob);
+                    await writable.close();
+                    await this.update_datasets(clientId, fileName)
+                    return handle;
+                  } catch (err) {
+                    console.error(err.name, err.message);
+                  }
+                },
+            handleAdd: function() {
+                let that = this;
+                that.visible = true;
+                that.form = {
+                    role:1
+                }
+                that.saveBtnTitle = 'Create Now'
+            },
+            handleSave: function() {
+                let that = this;
+                let data = that.form
+
+                let id = data.id;
+                let url = "info/add";
+                let message = 'Successfully Saved';
+                if (typeof id != "undefined") {
+                    url = "info/update";
+                    message = 'Successfully Modified';
+                }
+
+                ApiManager.post(url, data, function(res) {
+                    if (res.code == '0') {
+                        that.$notify({
+                            title: 'success',
+                            message: message,
+                            type: 'success'
+                        });
+                        that.visible = false;
+                        that.handleQuery();
+                    }
+                })
+            },
+            handleEdit: function(index, row) {
+                let that = this;
+                let id = row.id;
+                let data = {
+                    id: id
+                };
+                ApiManager.post('info/detail', data, function(res) {
+                    if (res.code == "0") {
+                        console.log(res.data)
+                        that.form = res.data
+                        that.visible = true;
+                        that.saveBtnTitle = 'Modify Now'
+                    }
+                });
+            },
+            handleQuery: function() {
+
+            	if(this.queryPanel.fileName==''){
+					this.$message.error('Please fill in the file name before querying!!');
+					this.tableData = []
+					this.currentClients = []
+					this.haveDownloadClient = false
+					this.showDownLoad = false
+					return
+            	}
+
+            	this.showDownLoad = true
+
+                let that = this;
+                let data = {
+                    page:this.currentPage,
+                    size:this.pageSize,
+                    clientName:that.queryPanel.clientName,
+                    fileName:that.queryPanel.fileName,
+                };
+                ApiManager.post('info/downloadlist', data, function(res) {
+                    that.tableData = res.data.list
+                    that.rowTotal = res.data.total;
+                    that.tableData.forEach(function(element) {
+                        that.currentClients.push(element['clientName'])
+                    });
+
+                    if(that.rowTotal>0){
+                        that.pull_update()
+                    	that.haveDownloadClient = true
+                    }
+
+                    /*for(let i=0;i<that.tableData.length;i++){
+                    	if(that.tableData[i].online=='1'){
+							that.haveDownloadClient = true
+							break
+                    	}
+                    }*/
+                })
+            },
+            handleDelete: function(index, row) {
+                let that = this;
+                that.$confirm('This operation will permanently delete the record. Do you want to continue?', '\n' +
+                    'prompt\n' +
+                    'prompt', {
+                    confirmButtonText: 'determine',
+                    cancelButtonText: 'cancel',
+                    type: 'warning'
+                }).then(() => {
+                    let id = row.id;
+                let data = {
+                    id: id
+                };
+                ApiManager.post('info/delete', data, function(res) {
+                    if (res.code == '0') {
+                        that.$notify({
+                            title: 'success',
+                            message: 'Successfully deleted',
+                            type: 'success'
+                        });
+                        that.handleQuery();
+                    }
+                });
+            }).catch(() => {
+
+                });
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.handleQuery();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.handleQuery();
+            },
+            handleDownload(index,row){
+                let LOCAL_APP_PATH = window.location.protocol+"//"+window.location.host+"/";
+                let fileName = row.clientUrl.substr(row.clientUrl.lastIndexOf("/")+1)
+                let data = {
+                    fileName: fileName,
+                    clientUrl: row.clientUrl
+                }
+                const _this = this
+                axios({
+                    method: 'get',
+                    url: LOCAL_APP_PATH+'/files',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    params: data
+                })
+                  .then(function (response) {
+                    _this.saveFile(response.data, row.id, row.fileName)
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+                return false
+                // window.location.href= LOCAL_APP_PATH+"files?fileName="+fileName+"&clientUrl="+row.clientUrl
+            },
+            handleDownloadLocal(fileType){
+                let that = this;
+                let data = {
+                    fileType: fileType
+                };
+                ApiLocalManager.get('download', data, function(res) {
+                    console.log(res)
+                });
+            },
+        },
+        created() {
+            // this.handleQuery();
+        }
+    })
+</script>
+</html>
