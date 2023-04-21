@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>File download</title>
+    <script src="/static/js/common/common.js"></script>
+</head>
+<body  >
+{% raw %}
+<div id="app"  v-cloak>
+    <el-row :gutter="10">
+        <el-form :model="queryPanel" ref="queryPanel" label-width="120px">
+            <el-col :span="6">
+                <el-form-item label="Client name:" prop="clientName">
+                    <el-input v-model="queryPanel.clientName" clearable></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="6">
+                <el-form-item label="File name:" prop="fileName">
+                    <el-input v-model="queryPanel.fileName" clearable></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="10">
+                <el-button icon="el-icon-search" @click="handleQuery" type="primary" plain > Query</el-button>
+            </el-col>
+        </el-form>
+    </el-row>
+
+
+    <el-row style="height: 80%;">
+        <el-col :span="24">
+            <el-table :data="tableData"  border style="width: 100%">
+
+                <el-table-column prop="clientName" label="Client name" width="180">
+                </el-table-column>
+
+                <el-table-column prop="fileName" label="File name" width="180">
+                </el-table-column>
+
+<!--                <el-table-column prop="orgUrl" label="原始下载地址" width="180">-->
+<!--                </el-table-column>-->
+
+                <el-table-column prop="clientUrl" label="Client download address">
+                </el-table-column>
+
+                 <el-table-column prop="online" label="Online/Off-line" width="180">
+                     <template slot-scope="scope">
+                            <el-tag
+                              :type="scope.row.online == '0' ? 'danger' : 'success'"
+                              disable-transitions>{{scope.row.online == '0' ? 'Off-line' : 'Online'}}</el-tag>
+                          </template>
+                </el-table-column>
+
+                 <el-table-column fixed="right" label="Operation" width="200">
+                    <template slot-scope="scope">
+                        <el-button v-if="scope.row.online == '1'" size="mini" @click="handleEdit(scope.$index, scope.row)">Download</el-button>
+                    </template>
+                </el-table-column>
+
+            </el-table>
+        </el-col>
+        <el-col :span="24" style="text-align: right">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    :page-sizes="[10, 20, 30, 100]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="rowTotal">
+            </el-pagination>
+        </el-col>
+    </el-row>
+</div>
+{% endraw %}
+</body>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                visible: false,
+                queryPanel: {clientName:'',fileName:''},
+                tableData: [],
+                form: {},
+                saveBtnTitle: '立即创建',
+                currentPage: 1,
+                pageSize: 10,
+                rowTotal: 0,
+                radio:3
+            }
+        },
+        methods: {
+            handleAdd: function() {
+                let that = this;
+                that.visible = true;
+                that.form = {
+                    role:1
+                }
+                that.saveBtnTitle = '立即创建'
+            },
+            handleSave: function() {
+                let that = this;
+                let data = that.form
+
+                let id = data.id;
+                let url = "info/add";
+                let message = '保存成功';
+                if (typeof id != "undefined") {
+                    url = "info/update";
+                    message = '修改成功';
+                }
+
+                ApiManager.post(url, data, function(res) {
+                    if (res.code == '0') {
+                        that.$notify({
+                            title: '成功',
+                            message: message,
+                            type: 'success'
+                        });
+                        that.visible = false;
+                        that.handleQuery();
+                    }
+                })
+            },
+            handleEdit: function(index, row) {
+                let that = this;
+                let id = row.id;
+                let data = {
+                    id: id
+                };
+                ApiManager.post('info/detail', data, function(res) {
+                    if (res.code == "0") {
+                        console.log(res.data)
+                        that.form = res.data
+                        that.visible = true;
+                        that.saveBtnTitle = '立即修改'
+                    }
+                });
+            },
+            handleQuery: function() {
+                let that = this;
+                let data = {
+                    page:this.currentPage,
+                    size:this.pageSize,
+                    clientName:that.queryPanel.clientName,
+                    fileName:that.queryPanel.fileName,
+                };
+                ApiManager.post('info/list', data, function(res) {
+                    that.tableData = res.data.list
+                    that.rowTotal = res.data.total;
+                })
+            },
+            handleDelete: function(index, row) {
+                let that = this;
+                that.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let id = row.id;
+                let data = {
+                    id: id
+                };
+                ApiManager.post('info/delete', data, function(res) {
+                    if (res.code == '0') {
+                        that.$notify({
+                            title: '成功',
+                            message: '删除成功',
+                            type: 'success'
+                        });
+                        that.handleQuery();
+                    }
+                });
+            }).catch(() => {
+
+                });
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.handleQuery();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.handleQuery();
+            },
+        },
+        created() {
+            this.handleQuery();
+        }
+    })
+</script>
+</html>

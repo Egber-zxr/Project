@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎登录</title>
+    <!-- import CSS -->
+<!--    <link rel="stylesheet" href="static/js/elementui/index.css">-->
+    <script src="static/js/common/style.js"></script>
+    <link rel="stylesheet" href="static/css/style.css"/>
+</head>
+<body>
+<div id="app">
+
+    <div class="wrapper">
+        <div class="container">
+            <h1>欢迎登录</h1>
+            <el-form ref="form" class="form" :model="form">
+                <input type="text" v-model="form.userName" placeholder="请输入用户名">
+                <input type="password" v-model="form.userPassword" placeholder="请输入密码">
+                <el-button id="login-button" @click="handleLogin">登&nbsp;&nbsp;录</el-button>
+                <div style="margin-top: 1.25rem;">
+                    <a href="javascript:void(0)" @click="handleGotoRegister">立即注册&gt;&gt;</a>
+                </div>
+            </el-form>
+        </div>
+        <ul class="bg-bubbles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</div>
+</body>
+<!-- 引用公共的js -->
+<script src="static/js/common/common.js"></script>
+<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {
+					form:{}
+				}
+			},
+			methods: {
+				handleGotoRegister: function() {
+					window.location.href = "/v_register"
+				},
+				handleLogin: function(){
+					let that = this;
+					let data = {
+						userName:that.form.userName,
+						password:that.form.userPassword
+					};
+					 ApiManager.post('login', data, function(res) {
+						if (res.code == "0") {
+							let resuData = res.data
+							if(resuData.length>0){
+
+								let obj = resuData[0];
+								window.sessionStorage.setItem("userId",obj.id);
+								window.sessionStorage.setItem("userName",obj.userName);
+								if(obj.role=='0'){
+								    window.location.href="/main"
+								}else{
+								    window.location.href="/companyList"
+								}
+
+							}else{
+								that.$notify({
+									title: '登录失败',
+									message: '请检查您的用户名或密码',
+									type: 'danger'
+								});
+							}
+							
+						}
+					}); 
+				}
+			}
+		})
+
+</script>
+</html>
