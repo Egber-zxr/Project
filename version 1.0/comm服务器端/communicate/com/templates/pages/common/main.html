@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>后台管理系统</title>
+		<script src="/static/js/common/common.js"></script>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			
+			
+			<el-container :style="defaultHeight">
+				
+				<el-header style="text-align: right; font-size: 12px">
+					<span style="float: left;font-size: 24px;">后台管理</span>
+					<span>{{userName}}</span>
+					<el-dropdown>
+						<i class="el-icon-setting" style="margin-left: 15px;color: #FFFFFF;">{{userName}}</i>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item @click.native="logout">退出</el-dropdown-item>
+						</el-dropdown-menu>
+					</el-dropdown>
+				</el-header>
+				
+				
+
+				<el-container>
+					<el-aside width="200px">
+						<el-menu :default-openeds="['2','3']">
+					
+							<el-submenu index="2">
+								<template slot="title"><i class="el-icon-menu"></i>功能菜单</template>
+								<el-menu-item-group>
+									<el-menu-item index="2-1" @click.native="showPage('companyManage')">公司管理</el-menu-item>
+								</el-menu-item-group>
+							</el-submenu>
+
+							<el-submenu index="3" v-if="isAdmin">
+								<template slot="title"><i class="el-icon-menu"></i>基础管理</template>
+								<el-menu-item-group>
+									<el-menu-item index="3-2" @click.native="showPage('userManage')">用户管理</el-menu-item>
+								</el-menu-item-group>
+							</el-submenu>
+
+						</el-menu>
+					</el-aside>
+
+					<el-main>
+						<iframe style="border: 0px;width: 100%;"  :height="tableHeight" :src="iframeSrc"></iframe>
+					</el-main>
+				</el-container>
+			</el-container>
+
+		</div>
+	</body>
+
+	<style>
+		.el-header {
+			background-color: #409EFF;
+			color: #fff;
+			line-height: 60px;
+		}
+
+		.el-aside {
+			color: #333;
+		}
+	</style>
+
+	<script>
+		const item = {
+		}
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {
+					userId:window.sessionStorage.getItem("userId"),
+					userName:window.sessionStorage.getItem("userName"),
+					defaultHeight: {
+						height: ""
+					},
+					isAdmin:false,
+					visible: false,
+					tableData: Array(20).fill(item),
+					iframeSrc: "companyManage",
+					tableHeight: window.innerHeight * 0.85
+				}
+			},
+			methods: {
+				logout: function() {
+					window.location.href = "/";
+				},
+				showPage:function(url){
+					this.iframeSrc = APP_PATH + url;
+				}
+			},
+			created() {
+				this.defaultHeight.height = window.innerHeight - 20 + "px";
+				if(this.userId==1){
+					this.isAdmin = true
+				}
+			}
+		})
+	</script>
+</html>

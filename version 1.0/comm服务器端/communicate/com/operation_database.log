@@ -1,0 +1,120 @@
+2023-01-08 18:46:36,529              ERROR   :connectDatabase failed
+2023-01-08 18:46:39,644              ERROR   :connectDatabase failed
+2023-01-08 18:46:55,268              ERROR   :connectDatabase failed
+2023-01-08 18:46:57,696              ERROR   :connectDatabase failed
+2023-01-08 18:46:58,618              ERROR   :connectDatabase failed
+2023-01-08 18:46:58,817              ERROR   :connectDatabase failed
+2023-01-08 18:47:02,596              ERROR   :connectDatabase failed
+2023-02-08 20:03:16,584              ERROR   :connectDatabase failed
+2023-02-09 10:40:24,864              INFO    :UPDATE info SET online='1'  WHERE clientName = W1 
+2023-02-09 10:40:24,869              ERROR   :execute failed: UPDATE info SET online='%s'  WHERE clientName = %s 
+2023-02-09 10:40:48,968              INFO    :UPDATE info SET online='1'  WHERE clientName = W1 
+2023-02-09 10:40:48,970              ERROR   :execute failed: UPDATE info SET online='%s'  WHERE clientName = %s 
+2023-02-09 10:41:31,019              INFO    :UPDATE info SET online='1'  WHERE clientName = W1 
+2023-02-09 10:41:31,020              ERROR   :execute failed: UPDATE info SET online='%s'  WHERE clientName = %s 
+2023-02-09 10:42:35,500              INFO    :UPDATE info SET online='1'  WHERE clientName = W1 
+2023-02-09 10:42:35,501              ERROR   :execute failed: UPDATE info SET online='%s'  WHERE clientName = %s 
+2023-02-09 10:42:58,033              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-09 13:40:18,858              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-09 13:41:16,947              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-09 13:43:03,742              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-09 13:43:22,348              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-09 13:43:32,423              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-09 13:43:40,098              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-10 09:28:15,766              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-10 09:28:16,760              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-10 09:28:57,135              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-10 09:28:57,892              INFO    :UPDATE info SET online='1'  WHERE clientName = 'W1'
+2023-02-10 09:48:42,126              INFO    :UPDATE info SET online='1',clientIp='127.0.0.1'  WHERE clientName = 'W1'
+2023-02-10 09:48:42,900              INFO    :UPDATE info SET online='1',clientIp='127.0.0.1'  WHERE clientName = 'W1'
+2023-02-10 15:16:30,784              INFO    :UPDATE info SET online='1',clientIp='127.0.0.1'  WHERE clientName = 'W1'
+2023-02-12 18:59:51,936              ERROR   :execute failed: INSERT INTO info(clientName,fileName,clientUrl,online,clientIp)  VALUES('%s','%s','%s','%s','%s','%s')
+2023-02-12 19:00:50,209              INFO    :INSERT INTO info(clientName,fileName,clientUrl,online,clientIp)  VALUES('W1','cifar-10-python.tar.gz','./datas/cifar-10-python.tar.gz','1','127.0.0.1')
+2023-02-13 11:44:10,634              INFO    :UPDATE info SET online='0' WHERE id = '1'
+2023-02-13 11:44:10,654              INFO    :UPDATE info SET online='0' WHERE id = '2'
+2023-02-13 11:44:10,673              INFO    :UPDATE info SET online='0' WHERE id = '3'
+2023-02-13 11:45:03,281              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 11:45:03,298              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 11:45:03,315              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 11:47:15,542              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 11:47:15,558              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 11:47:15,573              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 11:47:20,563              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 11:47:20,569              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 11:47:20,575              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 11:47:22,923              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 11:47:22,931              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 11:47:22,937              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 11:48:31,586              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:'8102'/online'  WHERE clientName = 'W1'
+2023-02-13 11:48:31,587              ERROR   :execute failed: UPDATE info SET online='%s',clientIp='%s'  WHERE clientName = '%s'
+2023-02-13 11:48:32,385              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:'8102'/online'  WHERE clientName = 'W1'
+2023-02-13 11:48:32,385              ERROR   :execute failed: UPDATE info SET online='%s',clientIp='%s'  WHERE clientName = '%s'
+2023-02-13 11:53:31,641              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:'8102'/online'  WHERE clientName = 'W1'
+2023-02-13 11:53:31,641              ERROR   :execute failed: UPDATE info SET online='%s',clientIp='%s'  WHERE clientName = '%s'
+2023-02-13 11:53:32,460              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:'8102'/online'  WHERE clientName = 'W1'
+2023-02-13 11:53:32,460              ERROR   :execute failed: UPDATE info SET online='%s',clientIp='%s'  WHERE clientName = '%s'
+2023-02-13 11:54:10,157              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:8102/online'  WHERE clientName = 'W1'
+2023-02-13 11:54:10,980              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:8102/online'  WHERE clientName = 'W1'
+2023-02-13 11:54:48,938              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 11:54:48,965              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 11:54:48,988              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 11:54:52,261              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 11:54:52,267              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 11:54:52,285              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 12:00:10,019              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 12:00:10,035              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 12:00:10,051              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 12:00:46,038              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 12:00:46,060              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 12:00:46,066              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 13:57:46,319              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 13:57:46,328              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 13:57:46,335              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 13:58:25,643              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 13:58:25,660              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 13:58:25,677              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 13:58:42,394              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 13:58:42,410              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 13:58:42,416              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 13:59:29,021              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 13:59:29,028              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 13:59:29,035              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 14:00:59,387              INFO    :UPDATE info SET online='0' WHERE id = 1
+2023-02-13 14:00:59,395              INFO    :UPDATE info SET online='0' WHERE id = 2
+2023-02-13 14:00:59,403              INFO    :UPDATE info SET online='0' WHERE id = 3
+2023-02-13 14:01:22,195              INFO    :UPDATE info SET online='1' WHERE id = 1
+2023-02-13 14:01:22,206              INFO    :UPDATE info SET online='1' WHERE id = 2
+2023-02-13 14:01:22,227              INFO    :UPDATE info SET online='1' WHERE id = 3
+2023-02-13 14:38:03,101              INFO    :UPDATE info SET online='1' WHERE id = 1
+2023-02-13 14:38:03,109              INFO    :UPDATE info SET online='1' WHERE id = 2
+2023-02-13 14:38:03,125              INFO    :UPDATE info SET online='1' WHERE id = 3
+2023-02-13 14:42:15,931              INFO    :INSERT INTO info(clientName,fileName,clientUrl,online,clientIp)  VALUES('W1','cifar-10-python.tar.gz','./datas/cifar-10-python.tar.gz','1','127.0.0.1')
+2023-02-13 14:44:04,132              INFO    :INSERT INTO info(clientName,fileName,clientUrl,online,clientIp)  VALUES('W1','cifar-10-python.tar.gz','./datas/cifar-10-python.tar.gz','1','http://127.0.0.1:8102/online')
+2023-02-13 14:44:32,225              INFO    :UPDATE info SET online='1' WHERE id = 5
+2023-02-13 14:48:18,150              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-13 14:48:57,727              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-13 14:49:07,972              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-13 14:49:16,626              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:8102/online'  WHERE clientName = 'W1'
+2023-02-13 14:49:17,481              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:8102/online'  WHERE clientName = 'W1'
+2023-02-13 14:49:20,952              INFO    :UPDATE info SET online='1' WHERE id = 5
+2023-02-13 14:49:34,950              INFO    :UPDATE info SET online='1' WHERE id = 5
+2023-02-13 14:49:41,590              INFO    :UPDATE info SET online='1' WHERE id = 5
+2023-02-13 15:53:28,394              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:8102/online'  WHERE clientName = 'W1'
+2023-02-13 15:53:29,271              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:8102/online'  WHERE clientName = 'W1'
+2023-02-13 16:45:09,394              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-13 16:45:22,669              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-13 16:45:23,712              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-13 16:45:45,334              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-13 16:45:46,739              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-13 16:45:48,525              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-13 16:45:49,708              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-16 13:03:04,704              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-16 13:03:05,186              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-16 13:05:35,003              INFO    :UPDATE info SET online='0' WHERE id = 5
+2023-02-16 13:05:57,394              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:8102/online'  WHERE clientName = 'W1'
+2023-02-16 13:05:58,589              INFO    :UPDATE info SET online='1',clientIp='http://127.0.0.1:8102/online'  WHERE clientName = 'W1'
+2023-02-16 13:06:04,449              INFO    :UPDATE info SET online='1' WHERE id = 5
+2023-02-16 13:06:41,252              INFO    :UPDATE info SET online='1' WHERE id = 5
+2023-02-16 13:07:01,559              INFO    :INSERT INTO info(clientName,fileName,clientUrl,online,clientIp)  VALUES('W1','cifar-10-python.tar.gz','./datas/cifar-10-python.tar.gz','1','http://127.0.0.1:8102/online')
+2023-02-16 13:07:18,171              INFO    :UPDATE info SET online='1' WHERE id = 5
+2023-02-16 13:07:18,190              INFO    :UPDATE info SET online='1' WHERE id = 6
