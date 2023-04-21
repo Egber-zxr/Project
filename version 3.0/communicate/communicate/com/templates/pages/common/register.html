@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>用户注册</title>
+		<!-- import CSS -->
+		<script src="static/js/common/style.js"></script>
+		<link rel="stylesheet" href="static/css/style.css" />
+	</head>
+	<body>
+		<div id="app">
+
+			<div class="wrapper">
+				<div class="container" style="padding:40px 0px">
+					<h1>用户注册</h1>
+					<el-form ref="form" class="form" :model="form">
+						<input type="text" v-model="form.userName" placeholder="请输入用户名">
+						<input type="password" v-model="form.userPassword" placeholder="请输入密码">
+						<input type="password" v-model="userConfirmPassword" placeholder="请再次输入密码">
+						<el-button  id="login-button" @click="handleRegister">注&nbsp;&nbsp;册</el-button>
+						<div style="margin-top: 1.25rem;">
+							<a href="javascript:void(0)" @click="handleGotoLogin">&lt;&lt;返回登录</a>
+						</div>
+					</el-form>
+				</div>
+
+				<ul class="bg-bubbles">
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
+	</body>
+
+	<script src="static/js/common/common.js"></script>
+
+	<script>
+		var that
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {
+					form:{},
+					userConfirmPassword:''
+				}
+			},
+			created(){
+				that = this
+			},
+			methods: {
+				handleGotoLogin: function() {
+					window.location.href = "/"
+				},
+				handleRegister:function(){
+					let that = this;
+
+					if(!that.validatePwd()){
+						return
+					}
+
+					let data = {
+						userName:that.form.userName,
+						password:that.form.userPassword
+					};
+					 ApiManager.post('register', data, function(res) {
+						if (res.data) {
+							that.$notify({
+								title: '注册成功',
+								message: '请返回登录',
+								type: 'success'
+							});
+							that.form = {}
+							that.userConfirmPassword = ''
+						}else{
+							that.$notify.error({
+								title: '注册失败',
+								message: res.msg,
+							});
+						}
+					}); 
+				},
+				validatePwd(){
+					if(that.form.userName==''){
+						that.$notify({
+							title: '提示',
+							message: '必须输入密码！！',
+							type: 'danger'
+						});
+						return false
+					}
+					console.log(that.form.userPassword,that.userConfirmPassword);
+					if(that.form.userPassword!=that.userConfirmPassword){
+						that.$notify({
+							title: '提示',
+							message: '您两次输入的密码不一致',
+							type: 'danger'
+						});
+						return false
+					}
+					return true
+				}
+			}
+		})
+	</script>
+</html>

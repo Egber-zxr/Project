@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="/static/js/common/common.js"></script>
+</head>
+<body  >
+{% raw %}
+<div id="app"  v-cloak>
+    <el-row :gutter="10">
+        <el-form :model="queryPanel" ref="queryPanel" label-width="120px">
+            <el-col :span="10">
+                <el-form-item label="用户名称:" prop="name">
+                    <el-input v-model="queryPanel.name" clearable></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="10">
+                <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+            </el-col>
+        </el-form>
+    </el-row>
+
+
+    <el-dialog :visible.sync="visible" title="新增或修改">
+        <el-form ref="form" :model="form" label-width="80px">
+
+                <el-form-item label="登录名">
+                    <el-input v-model="form.userName"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input v-model="form.password"></el-input>
+                </el-form-item>
+                <el-form-item label="真实姓名">
+                    <el-input v-model="form.name"></el-input>
+                </el-form-item>
+
+                <el-form-item label="角色">
+                    <el-radio-group v-model="form.role">
+                        <el-radio :label="1">普通用户</el-radio>
+                        <el-radio :label="0">管理员</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="handleSave">{{saveBtnTitle}}</el-button>
+                <el-button @click="visible = false">取消</el-button>
+            </el-form-item>
+
+        </el-form>
+    </el-dialog>
+
+    <el-row style="height: 80%;">
+        <el-col :span="24">
+            <el-table :data="tableData"  border style="width: 100%">
+
+
+                <el-table-column prop="userName" label="登录名">
+                </el-table-column>
+
+
+                <el-table-column prop="password" label="密码" width="180">
+                </el-table-column>
+
+
+                <el-table-column prop="name" label="真实姓名" width="180">
+                </el-table-column>
+
+                 <el-table-column prop="role" label="角色" width="180">
+                     <template slot-scope="scope">
+                            <el-tag
+                              :type="scope.row.role == '0' ? 'primary' : 'success'"
+                              disable-transitions>{{scope.row.role == '0' ? '管理员' : '普通用户'}}</el-tag>
+                          </template>
+                </el-table-column>
+
+                <el-table-column fixed="right" label="操作" width="200">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+
+            </el-table>
+        </el-col>
+        <el-col :span="24" style="text-align: right">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    :page-sizes="[10, 20, 30, 100]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="rowTotal">
+            </el-pagination>
+        </el-col>
+    </el-row>
+</div>
+{% endraw %}
+</body>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                visible: false,
+                queryPanel: {name:''},
+                tableData: [],
+                form: {},
+                saveBtnTitle: '立即创建',
+                currentPage: 1,
+                pageSize: 10,
+                rowTotal: 0,
+                radio:3
+            }
+        },
+        methods: {
+            handleAdd: function() {
+                let that = this;
+                that.visible = true;
+                that.form = {
+                    role:1
+                }
+                that.saveBtnTitle = '立即创建'
+            },
+            handleSave: function() {
+                let that = this;
+                let data = that.form
+
+                let id = data.id;
+                let url = "user/add";
+                let message = '保存成功';
+                if (typeof id != "undefined") {
+                    url = "user/update";
+                    message = '修改成功';
+                }
+
+                ApiManager.post(url, data, function(res) {
+                    if (res.code == '0') {
+                        that.$notify({
+                            title: '成功',
+                            message: message,
+                            type: 'success'
+                        });
+                        that.visible = false;
+                        that.handleQuery();
+                    }
+                })
+            },
+            handleEdit: function(index, row) {
+                let that = this;
+                let id = row.id;
+                let data = {
+                    id: id
+                };
+                ApiManager.post('user/detail', data, function(res) {
+                    if (res.code == "0") {
+                        console.log(res.data)
+                        that.form = res.data
+                        that.visible = true;
+                        that.saveBtnTitle = '立即修改'
+                    }
+                });
+            },
+            handleQuery: function() {
+                let that = this;
+                let data = {
+                    page:this.currentPage,
+                    size:this.pageSize,
+                    userName:that.queryPanel.name
+                };
+                ApiManager.post('user/list', data, function(res) {
+                    that.tableData = res.data.list
+                    that.rowTotal = res.data.total;
+                })
+            },
+            handleDelete: function(index, row) {
+                let that = this;
+                that.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let id = row.id;
+                let data = {
+                    id: id
+                };
+                ApiManager.post('user/delete', data, function(res) {
+                    if (res.code == '0') {
+                        that.$notify({
+                            title: '成功',
+                            message: '删除成功',
+                            type: 'success'
+                        });
+                        that.handleQuery();
+                    }
+                });
+            }).catch(() => {
+
+                });
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.handleQuery();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.handleQuery();
+            },
+        },
+        created() {
+            this.handleQuery();
+        }
+    })
+</script>
+</html>
