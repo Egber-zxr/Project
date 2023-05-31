@@ -1,0 +1,6 @@
+此文件夹中：datas下的内容为本项目用到的数据集，因当个过大，所以压缩上传至此处，路径为\commclient\commclient\client\datas下
+此外，上面提到的client文件夹下还有cifar10的数据集，用于模拟外部机器学习项目
+对于此项目，有六个服务，分别为服务器（1个），在\communicate\communicate\com目录下的main.py程序
+客户端1（2个），在\commclient\commclient\client目录下的online.py，负责客户端的上线，默认为在线状态；同时拥有download.py，负责数据集的下载等功能
+客户端2（2个），类似于客户端1的功能，但是本项目设置了用户分级，1为VIP用户代表，拥有加密解密功能，2为普通用户，除加密解密其他功能都具有。
+外部机器学习程序（1个），我将其部署到客户端1中，模拟客户端1在进行机器学习任务，为main1.py程序。
